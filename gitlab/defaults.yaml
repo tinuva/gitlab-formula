@@ -1,0 +1,54 @@
+{% load_yaml as rawmap %}
+Debian:
+  ruby:
+    rvm: {}
+    sys:
+      pkgs:
+        - ruby
+        - ruby-dev
+  user: {}
+  group: {}
+  gitlab:
+    pkgs:
+      - build-essential
+      - zlib1g-dev
+      - libyaml-dev
+      - libssl-dev
+      - libgdbm-dev
+      - libreadline-dev
+      - libncurses5-dev
+      - libffi-dev
+      - checkinstall
+      - libxml2-dev
+      - libxslt-dev
+      - libcurl4-openssl-dev
+      - libicu-dev
+      - python-docutils
+    shell: {}
+    config:
+      defaults_file: {}
+      shell_config: {}
+    service: {}
+  db:
+    pkgs:
+      - libpq-dev
+RedHat:
+  ruby:
+    rvm: {}
+    sys:
+      pkgs:
+        - ruby193-ruby
+        - ruby193-ruby-devel
+        - ruby193-rubygem-bundler
+  user: {}
+  group: {}
+  gitlab:
+    pkgs: []
+    shell: {}
+    config:
+      defaults_file: {}
+      shell_config: {}
+    service: {}
+  db:
+    pkgs: []
+{% endload %}

@@ -1,27 +1,76 @@
+==============
 gitlab-formula
 ==============
 
-SaltStack formula to install GitLab
+Salt Stack Formula to set up and configure Gitlab, a project and repository management application
 
-Salt state for installing GitLab - https://gitlab.com/gitlab-org/gitlab-ce
+NOTICE BEFORE YOU USE
+---------------------
 
-Following original install docs ( https://gitlab.com/gitlab-org/gitlab-ce/blob/6-5-stable/doc/install/installation.md ) as close as possible, with some exceptions:
-* ruby 1.9.3 is enough for it to work, so I'm using system packages for that
-* Using PostgreSQL "because".
+* This formula aims to follow the conventions and recommendations described at http://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html#conventions-formula and http://docs.saltstack.com/en/latest/topics/best_practices.html
 
-Currently tested only on Debian, further systems planned.
+TODO
+----
 
-Initial work done for CentOS but doesn't work there yet, heavily inspired by https://github.com/gitlabhq/gitlab-recipes/tree/master/install/centos
+* add backup cronjob
 
-There are some initial bits for supporting RVM, but it's not working yet.
+Instructions
+------------
 
-I chose to use PostgreSQL "because", planning to make this tunable via pillar.
+1. Add this repository as a `GitFS <http://docs.saltstack.com/topics/tutorials/gitfs.html>`_ backend in your Salt master config.
 
-I assume you're running gitlab under your node's FQDN, not under another name.
+2. Configure your Pillar top file (``/srv/pillar/top.sls``) and your pillars, see pillar.example.sls
 
-Attempt made to have most settings tunable via pillars.
+3. Include this Formula within another Formula or simply define your needed states within the Salt top file (``/srv/salt/top.sls``).
+
+Available states
+----------------
+
+.. contents::
+    :local:
+
+``gitlab``
+~~~~~~~~~~
+Setup and configure Gitlab
+
+Additional resources
+--------------------
+
+This formula is based on https://github.com/saltstack-formulas/gitlab-formula
+
+Templates
+---------
+
+Some states/ commands may refer to templates which aren't included in the files folder (``template/files``). Take a look at ``contrib/`` (if present) for e.g. template examples and place them in separate file roots (e.g. Git repository, refer to `GitFS <http://docs.saltstack.com/topics/tutorials/gitfs.html>`_) in your Salt master config.
 
 Formula Dependencies
-====================
+--------------------
 
-* git: https://github.com/saltstack-formulas/git-formula
+* TODO: redis+postgresql+nginx+logrotate+curl+ssh+internet http access
+* https://github.com/bechtoldt/redis-formula
+*
+
+Contributions
+-------------
+
+Contributions are always welcome. All development guidelines you have to know are
+
+* set a shebang in the first line (e.g. ``#!jinja|yaml``)
+* write clean code (proper YAML+Jinja syntax, no trailing whitespaces, no empty lines with whitespaces, LF only)
+* set sane default settings
+* test your code
+* update README.rst doc
+
+Salt Compatibility
+------------------
+
+Tested with:
+
+* Salt Development Version (f9ec0bfb5a2c573785d55d02a01267e99848d333)
+
+OS Compatibility
+----------------
+
+Tested with:
+
+* GNU/ Linux Debian Wheezy
