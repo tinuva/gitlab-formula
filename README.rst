@@ -14,7 +14,6 @@ TODO
 
 * add backup cronjob
 * show logrotate pillar example
-* show nginx pillar example
 * show git config pillar example
 
 Instructions
