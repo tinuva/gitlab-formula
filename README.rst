@@ -13,6 +13,9 @@ TODO
 ----
 
 * add backup cronjob
+* show logrotate pillar example
+* show nginx pillar example
+* show git config pillar example
 
 Instructions
 ------------
@@ -46,9 +49,19 @@ Some states/ commands may refer to templates which aren't included in the files 
 Formula Dependencies
 --------------------
 
-* TODO: redis+postgresql+nginx+logrotate+curl+ssh+internet http access
-* https://github.com/bechtoldt/redis-formula
-*
+System Requirements:
+
+* Internet HTTP access for downloading various libs
+
+Formulas:
+
+* https://github.com/bechtoldt/postfix-formula (optional)
+* https://github.com/bechtoldt/redis-formula (optional)
+* https://github.com/bechtoldt/nginx-formula (optional)
+* https://github.com/bechtoldt/git-formula (optional)
+* https://github.com/bechtoldt/postgresql-formula (optional)
+* https://github.com/bechtoldt/ssh-formula (optional)
+* https://github.com/bechtoldt/tools-formula (optional but helpful for installing miscellaneous tools)
 
 Contributions
 -------------
