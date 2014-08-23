@@ -1,7 +1,7 @@
 #!jinja|yaml
 
 {% from 'gitlab/defaults.yaml' import rawmap with context %}
-{% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('gitlab:lookup')) %}
+{% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('gitlab:lookup')  ) %}
 
 include:
   - gitlab
@@ -14,9 +14,10 @@ gitlab:
   git:
     - latest
     - name: https://gitlab.com/gitlab-org/gitlab-ce.git
-    - rev: {{ salt['pillar.get']('gitlab:version', '7-0-stable') }}
+    - rev: {{ salt['pillar.get']('gitlab:version', '7-1-stable') }}
     - user: {{ gl_user }}
     - target: {{ gl_home }}/gitlab
+    - force_checkout: True
     - watch_in:
       - cmd: gitlab_gems
       - cmd: shell_setup
@@ -32,10 +33,18 @@ gitlab:
 gitlab_gems:
   cmd:
     - wait
-    - name: bundle install -j2 --verbose --deployment --without development test mysql aws
+    - name: bundle install --verbose --deployment --without development test mysql aws
     - user: {{ gl_user }}
     - cwd: {{ gl_home }}/gitlab
     - shell: /bin/bash
+
+home_dir:
+  file:
+    - directory
+    - name: {{ gl_home }}
+    - user: {{ gl_user }}
+    - group: {{ gl_group }}
+    - mode: 755
 
 satellites_dir:
   file:
@@ -104,7 +113,7 @@ db_config:
 shell_setup:
   cmd:
     - wait
-    - name: bundle exec rake gitlab:shell:install[{{ datamap.gitlab.shell.version|default('v1.9.6') }}] REDIS_URL=redis://localhost:6379 RAILS_ENV=production
+    - name: bundle exec rake gitlab:shell:install[{{ salt['pillar.get']('gitlab:shell:version', 'v1.9.6') }}] REDIS_URL=redis://localhost:6379 RAILS_ENV=production
     - user: {{ gl_user }}
     - cwd: {{ gl_home }}/gitlab
 

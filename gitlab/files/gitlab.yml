@@ -1,3 +1,4 @@
+{{pillar['headers']['salt']['file']}}
 {%- from 'gitlab/defaults.yaml' import rawmap with context -%}
 {%- set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('gitlab:lookup')) -%}
 
@@ -84,7 +85,6 @@ production: &base
       issues: true
       merge_requests: true
       wiki: false
-      wall: false
       snippets: false
       visibility_level: "private"  # can be "private" | "internal" | "public"
 
@@ -149,6 +149,20 @@ production: &base
     # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
     # disable this setting, because the userPrincipalName contains an '@'.
     allow_username_or_email_login: '{{ salt['pillar.get']('gitlab:ldap:allow_username_or_email_login', true) }}'
+    
+    # Base where we can search for users
+    #
+    #   Ex. ou=People,dc=gitlab,dc=example
+    #
+    base: '{{ salt['pillar.get']('gitlab:ldap:base', '') }}'
+
+    # Filter LDAP users
+    #
+    #   Format: RFC 4515
+    #   Ex. (employeeType=developer)
+    #
+    user_filter: '{{ salt['pillar.get']('user_filter', '') }}'
+    
 
   ## OmniAuth settings
   omniauth:
@@ -216,7 +230,7 @@ production: &base
     bin_path: /usr/bin/git
     # Max size of a git object (e.g. a commit), in bytes
     # This value can be increased if you have very large commits
-    max_size: 5242880 # 5.megabytes
+    max_size: 20971520 # 20.megabytes
     # Git timeout to read a commit, in seconds
     timeout: 10
 
@@ -228,10 +242,15 @@ production: &base
     ## Google analytics. Uncomment if you want it
     # google_analytics_id: '_your_tracking_id'
 
+    ## Piwik analytics.
+    # piwik_url: '_your_piwik_url'
+    # piwik_site_id: '_your_piwik_site_id'
+
     ## Text under sign-in page (Markdown enabled)
     # sign_in_text: |
     #   ![Company Logo](http://www.companydomain.com/logo.png)
     #   [Learn more about CompanyName](http://www.companydomain.com/)
+
 
 development:
   <<: *base

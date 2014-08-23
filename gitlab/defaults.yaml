@@ -20,7 +20,7 @@ Debian:
       - libffi-dev
       - checkinstall
       - libxml2-dev
-      - libxslt-dev
+      - libxslt1-dev
       - libcurl4-openssl-dev
       - libicu-dev
       - python-docutils
@@ -37,18 +37,85 @@ RedHat:
     rvm: {}
     sys:
       pkgs:
-        - ruby193-ruby
-        - ruby193-ruby-devel
-        - ruby193-rubygem-bundler
+         - ruby
+         - ruby-devel
+         - rubygem-bundler
+#        - ruby193-ruby
+#        - ruby193-ruby-devel
+#        - ruby193-rubygem-bundler
   user: {}
   group: {}
   gitlab:
-    pkgs: []
+    pkgs:
+      - autoconf
+      - automake
+      - binutils
+      - bison
+      - byacc
+      - cmake
+      - crontabs
+      - cscope
+      - ctags
+      - cvs
+      - libdb4-devel
+      - diffstat
+      - doxygen
+      - elfutils
+      - expat-devel
+      - flex
+      - gcc
+      - gcc-c++
+      - gcc-gfortran
+      - gdbm-devel
+      - gettext
+      - git
+      - glibc-devel
+      - indent
+      - intltool
+      - libffi
+      - libffi-devel
+      - libicu
+      - libicu-devel
+      - libcurl-devel
+      - libtool
+      - libxml2
+      - libxml2-devel
+      - libxslt
+      - libxslt-devel
+      - libyaml
+      - libyaml-devel
+      - logrotate
+      - logwatch
+      - make
+      - ncurses-devel
+      - openssl-devel
+      - patch
+      - patchutils
+      - perl-Time-HiRes
+      - pkgconfig
+      - postgresql-devel
+      - python-devel
+      - rcs
+      - readline
+      - readline-devel
+      - redhat-rpm-config
+      - redis
+      - rpm-build
+      - sqlite-devel
+      - subversion
+      - sudo
+      - swig
+      - system-config-firewall-tui
+      - systemtap
+      - tcl-devel
+      - vim-enhanced
+      - wget
     shell: {}
     config:
       defaults_file: {}
       shell_config: {}
     service: {}
   db:
-    pkgs: []
+    pkgs:
+      - postgresql-libs
 {% endload %}

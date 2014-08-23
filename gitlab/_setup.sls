@@ -1,7 +1,7 @@
 #!jinja|yaml
 
 {% from 'gitlab/defaults.yaml' import rawmap with context %}
-{% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('gitlab:lookup')) %}
+{% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('gitlab:lookup')  ) %}
 
 include:
   - gitlab
@@ -54,73 +54,6 @@ gitlab_deppkgs:
   pkg:
     - installed
     - pkgs: {{ datamap.gitlab.pkgs|default([]) }}
-
-{# TODO check redhat pkgs:
-      - autoconf
-      - automake
-      - binutils
-      - bison
-      - byacc
-      - crontabs
-      - cscope
-      - ctags
-      - cvs
-      - db4-devel
-      - diffstat
-      - doxygen
-      - elfutils
-      - expat-devel
-      - flex
-      - gcc
-      - gcc-c++
-      - gcc-gfortran
-      - gdbm-devel
-      - gettext
-      - git
-      - glibc-devel
-      - indent
-      - intltool
-      - libffi
-      - libffi-devel
-      - libicu
-      - libicu-devel
-      - libcurl-devel
-      - libtool
-      - libxml2
-      - libxml2-devel
-      - libxslt
-      - libxslt-devel
-      - libyaml
-      - libyaml-devel
-      - logrotate
-      - logwatch
-      - make
-      - ncurses-devel
-      - openssl-devel
-      - patch
-      - patchutils
-      - perl-Time-HiRes
-      - pkgconfig
-      - postgresql-devel
-      - python-devel
-      - rcs
-      - readline
-      - readline-devel
-      - redhat-rpm-config
-      - redis
-      - rpm-build
-      - sqlite-devel
-      - subversion
-      - sudo
-      - swig
-      - system-config-firewall-tui
-      - systemtap
-      - tcl-devel
-      - vim-enhanced
-      - wget
-    - require:
-      - pkgrepo: PUIAS_6_computational
-#}
 
 dbdriver:
   pkg:
