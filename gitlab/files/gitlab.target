@@ -8,8 +8,8 @@
 
 [Unit]
 Description=GitLab - Self Hosted Git Management
-Requires=redis.service mysqld.service
-After=redis.service mysqld.service syslog.target network.target
+Requires=redis.service postgresql.service
+After=redis.service postgresql.service syslog.target network.target
 
 [Install]
 WantedBy=multi-user.target
