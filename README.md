@@ -23,7 +23,6 @@ Salt Stack Formula to set up and configure Gitlab, a project and repository mana
 ## Available states
 
 ``gitlab``
-~~~~~~~~~~
 Setup and configure Gitlab
 
 ## Additional resources
