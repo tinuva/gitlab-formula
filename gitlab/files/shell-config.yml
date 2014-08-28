@@ -11,11 +11,9 @@ user: {{ gl_user }}
 
 # Url to gitlab instance. Used for api calls. Should end with a slash.
 {%- if salt['pillar.get']('gitlab:https', false) %}
-#gitlab_url: "https://{{ gl_domain }}/" ## broken for now
-gitlab_url: "https://127.0.0.1/"
+gitlab_url: "https://{{ gl_domain }}/" 
 {% else %}
-#gitlab_url: "http://{{ gl_domain }}/" # broken for now
-gitlab_url: "https://127.0.0.1/"
+gitlab_url: "http://{{ gl_domain }}/" 
 {% endif %}
 
 http_settings:
@@ -27,8 +25,7 @@ http_settings:
 {%- if salt['pillar.get']('gitlab:shell:ca_path', false) %}
   ca_path: {{ salt['pillar.get']('gitlab:shell:ca_path') }}
 {%- endif %}
-  #self_signed_cert: {{ salt['pillar.get']('gitlab:shell:self_signed_cert', false) }}
-  self_signed_cert: True
+  self_signed_cert: {{ salt['pillar.get']('gitlab:shell:self_signed_cert', false) }}
 
 # Repositories path
 # Give the canonicalized absolute pathname,
