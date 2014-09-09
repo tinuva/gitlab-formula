@@ -161,7 +161,7 @@ production: &base
     #   Format: RFC 4515
     #   Ex. (employeeType=developer)
     #
-    user_filter: '{{ salt['pillar.get']('user_filter', '') }}'
+    user_filter: '{{ salt['pillar.get']('gitlab:ldap:user_filter', '') }}'
     
 
   ## OmniAuth settings
