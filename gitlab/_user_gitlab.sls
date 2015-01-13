@@ -14,7 +14,7 @@ gitlab_user:
 
 gitlab_user_cron_backup:
   cron:
-    - present
+    - {{ datamap.backup.cron|default('absent') }}
     - user: {{ datamap.user.name|default('git') }}
     - name: cd /home/git/gitlab && PATH=/usr/local/bin:/usr/bin:/bin bundle exec rake gitlab:backup:create RAILS_ENV=production CRON=1
     - minute: 0
