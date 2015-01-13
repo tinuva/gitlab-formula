@@ -1,7 +1,7 @@
 #!jinja|yaml
 
 {% from 'gitlab/defaults.yaml' import rawmap with context %}
-{% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('gitlab:lookup')  ) %}
+{% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('gitlab')  ) %}
 
 gitlab_user:
   user:
