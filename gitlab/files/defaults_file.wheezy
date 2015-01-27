@@ -1,4 +1,3 @@
-{{pillar['headers']['salt']['file']}}
 # Copy this lib/support/init.d/gitlab.default.example file to
 # /etc/default/gitlab in order for it to apply to your system.
 
