@@ -70,6 +70,14 @@ sockets_dir:
     - group: {{ gl_group }}
     - mode: 751
 
+uploads_dir:
+  file:
+    - directory
+    - name: {{ gl_home }}/gitlab/public/uploads
+    - user: {{ gl_user }}
+    - group: {{ gl_group }}
+    - mode: 755
+
 unicorn_config:
   file:
     - managed
