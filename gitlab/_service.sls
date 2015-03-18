@@ -43,6 +43,7 @@ unicorn_systemd:
     - watch:
       - git: gitlab
       - file: gitlab
+      - file: unicorn_config
       - cmd: shell_setup
 
 gitlab_systemd:
