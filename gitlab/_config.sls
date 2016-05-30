@@ -14,7 +14,7 @@ gitlab:
   git:
     - latest
     - name: https://gitlab.com/gitlab-org/gitlab-ce.git
-    - rev: {{ salt['pillar.get']('gitlab:version', '7-7-stable') }}
+    - rev: {{ salt['pillar.get']('gitlab:version', '7-8-stable') }}
     - user: {{ gl_user }}
     - target: {{ gl_home }}/gitlab
     - force_checkout: True
@@ -121,7 +121,7 @@ db_config:
 shell_setup:
   cmd:
     - wait
-    - name: bundle exec rake gitlab:shell:install[{{ salt['pillar.get']('gitlab:shell:version', 'v2.4.2') }}] REDIS_URL=redis://localhost:6379 RAILS_ENV=production
+    - name: bundle exec rake gitlab:shell:install[{{ salt['pillar.get']('gitlab:shell:version', 'v2.5.4') }}] REDIS_URL=redis://localhost:6379 RAILS_ENV=production
     - user: {{ gl_user }}
     - cwd: {{ gl_home }}/gitlab
 

@@ -56,11 +56,12 @@ production: &base
     # Email address used in the "From" field in mails sent by GitLab
     email_from: gitlab@{{ gl_domain }}
 
+    # Email server smtp settings are in config/initializers/smtp_settings.rb.sample
+
     # Email address of your support contact (default: same as email_from)
     support_email: support@{{ grains['fqdn'] }}
 
     ## User settings
-    default_projects_limit: 100
     # default_can_create_group: false  # default: true
     # username_changing_enabled: false # default: true - User can change her username/namespace
     ## Default theme
@@ -72,10 +73,6 @@ production: &base
     # default_theme: 2 # default: 2
 
 
-    ## Users management
-    # default: false - Account passwords are not sent via the email if signup is enabled.
-    # signup_enabled: true
-
     # Restrict setting visibility levels for non-admin users.
     # The default is to allow all levels.
     #restricted_visibility_levels: [ "public" ]
@@ -84,7 +81,7 @@ production: &base
     # If a commit message matches this regular expression, all issues referenced from the matched text will be closed.
     # This happens when the commit is pushed or merged into the default branch of a project.
     # When not specified the default issue_closing_pattern as specified below will be used.
-    # issue_closing_pattern: '([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+'
+    # issue_closing_pattern: '((?:[Cc]los(?:e[sd]|ing)|[Ff]ix(?:e[sd]|ing)?) +(?:(?:issues? +)?#\d+(?:(?:, *| +and +)?))+)'
 
     ## Default project features settings
     default_projects_features:
@@ -152,7 +149,7 @@ production: &base
         base: '{{ salt['pillar.get']('gitlab:ldap:base', '') }}'
         port: {{ salt['pillar.get']('gitlab:ldap:port', 636) }}
         uid: '{{ salt['pillar.get']('gitlab:ldap:uid', 'sAMAccountName') }}'
-        method: '{{ salt['pillar.get']('gitlab:ldap:method', 'ssl') }}' # "ssl" or "plain"
+        method: '{{ salt['pillar.get']('gitlab:ldap:method', 'ssl') }}' # "ssl" or "plain" or "tls"
         bind_dn: '{{ salt['pillar.get']('gitlab:ldap:bind_dn', '') }}'
         password: '{{ salt['pillar.get']('gitlab:ldap:password', '') }}'
 
@@ -276,11 +273,6 @@ production: &base
     ## Piwik analytics.
     # piwik_url: '_your_piwik_url'
     # piwik_site_id: '_your_piwik_site_id'
-
-    ## Text under sign-in page (Markdown enabled)
-    # sign_in_text: |
-    #   ![Company Logo](http://www.companydomain.com/logo.png)
-    #   [Learn more about CompanyName](http://www.companydomain.com/)
 
   rack_attack:
     git_basic_auth:
