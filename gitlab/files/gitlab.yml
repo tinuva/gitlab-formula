@@ -131,36 +131,52 @@ production: &base
   #   bundle exec rake gitlab:ldap:check RAILS_ENV=production
   ldap:
     enabled: {{ salt['pillar.get']('gitlab:ldap:enabled', False) }}
-    host: '{{ salt['pillar.get']('gitlab:ldap:host', '') }}'
-    base: '{{ salt['pillar.get']('gitlab:ldap:base', '') }}'
-    port: {{ salt['pillar.get']('gitlab:ldap:port', 636) }}
-    uid: '{{ salt['pillar.get']('gitlab:ldap:uid', 'sAMAccountName') }}'
-    method: '{{ salt['pillar.get']('gitlab:ldap:method', 'ssl') }}' # "ssl" or "plain"
-    bind_dn: '{{ salt['pillar.get']('gitlab:ldap:bind_dn', '') }}'
-    password: '{{ salt['pillar.get']('gitlab:ldap:password', '') }}'
-    # If allow_username_or_email_login is enabled, GitLab will ignore everything
-    # after the first '@' in the LDAP username submitted by the user on login.
-    #
-    # Example:
-    # - the user enters 'jane.doe@example.com' and 'p@ssw0rd' as LDAP credentials;
-    # - GitLab queries the LDAP server with 'jane.doe' and 'p@ssw0rd'.
-    #
-    # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
-    # disable this setting, because the userPrincipalName contains an '@'.
-    allow_username_or_email_login: '{{ salt['pillar.get']('gitlab:ldap:allow_username_or_email_login', false) }}'
-    
-    # Base where we can search for users
-    #
-    #   Ex. ou=People,dc=gitlab,dc=example
-    #
-    base: '{{ salt['pillar.get']('gitlab:ldap:base', '') }}'
+    servers:
+      main:
+        ## label
+        #
+        # A human-friendly name for your LDAP server. It is OK to change the label later,
+        # for instance if you find out it is too large to fit on the web page.
+        #
+        # Example: 'Paris' or 'Acme, Ltd.'
+        Label: 'LDAP'
 
-    # Filter LDAP users
-    #
-    #   Format: RFC 4515
-    #   Ex. (employeeType=developer)
-    #
-    user_filter: '{{ salt['pillar.get']('gitlab:ldap:user_filter', '') }}'
+        host: '{{ salt['pillar.get']('gitlab:ldap:host', '') }}'
+        base: '{{ salt['pillar.get']('gitlab:ldap:base', '') }}'
+        port: {{ salt['pillar.get']('gitlab:ldap:port', 636) }}
+        uid: '{{ salt['pillar.get']('gitlab:ldap:uid', 'sAMAccountName') }}'
+        method: '{{ salt['pillar.get']('gitlab:ldap:method', 'ssl') }}' # "ssl" or "plain"
+        bind_dn: '{{ salt['pillar.get']('gitlab:ldap:bind_dn', '') }}'
+        password: '{{ salt['pillar.get']('gitlab:ldap:password', '') }}'
+
+        # This setting specifies if LDAP server is Active Directory LDAP server.
+        # For non AD servers it skips the AD specific queries.
+        # If your LDAP server is not AD, set this to false.
+        active_directory: '{{ salt['pillar.get']('gitlab:ldap:active_directory', true) }}'
+
+        # If allow_username_or_email_login is enabled, GitLab will ignore everything
+        # after the first '@' in the LDAP username submitted by the user on login.
+        #
+        # Example:
+        # - the user enters 'jane.doe@example.com' and 'p@ssw0rd' as LDAP credentials;
+        # - GitLab queries the LDAP server with 'jane.doe' and 'p@ssw0rd'.
+        #
+        # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
+        # disable this setting, because the userPrincipalName contains an '@'.
+        allow_username_or_email_login: '{{ salt['pillar.get']('gitlab:ldap:allow_username_or_email_login', false) }}'
+        
+        # Base where we can search for users
+        #
+        #   Ex. ou=People,dc=gitlab,dc=example
+        #
+        base: '{{ salt['pillar.get']('gitlab:ldap:base', '') }}'
+
+        # Filter LDAP users
+        #
+        #   Format: RFC 4515
+        #   Ex. (employeeType=developer)
+        #
+        user_filter: '{{ salt['pillar.get']('gitlab:ldap:user_filter', '') }}'
     
 
   ## OmniAuth settings
@@ -206,6 +222,15 @@ production: &base
   backup:
     path: "{{ salt['pillar.get']('gitlab:backup:path', 'tmp/backups') }}"   # Relative paths are relative to Rails.root (default: tmp/backups/)
     keep_time: {{ salt['pillar.get']('gitlab:backup:keep_time', '604800') }}   # default: 0 (forever) (in seconds)
+    # upload:
+    #   # Fog storage connection settings, see http://fog.io/storage/ .
+    #   connection:
+    #     provider: AWS
+    #     region: eu-west-1
+    #     aws_access_key_id: AKIAKIAKI
+    #     aws_secret_access_key: 'secret123'
+    #   # The remote 'directory' to store your backups. For S3, this would be the bucket name.
+    #   remote_directory: 'my.s3.bucket'
 
   ## GitLab Shell settings
   gitlab_shell:

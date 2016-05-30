@@ -38,9 +38,9 @@ auth_file: "{{ gl_home }}/.ssh/authorized_keys"
 # Redis settings used for pushing commit notices to gitlab
 redis:
   bin: /usr/bin/redis-cli
-  host: localhost
-  port: 6379
-  # socket: /tmp/redis.socket # Only define this if you want to use sockets
+  #host: localhost
+  #port: 6379
+  socket: /var/run/redis/redis.sock # Only define this if you want to use sockets
   namespace: resque:gitlab
 
 # Log file.
