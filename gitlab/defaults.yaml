@@ -25,6 +25,7 @@ Debian:
       - libcurl4-openssl-dev
       - libicu-dev
       - python-docutils
+      - nodejs
     shell: {}
     config:
       defaults_file: {}
@@ -112,6 +113,7 @@ RedHat:
       - tcl-devel
       - vim-enhanced
       - wget
+      - nodejs
     shell: {}
     config:
       defaults_file: {}

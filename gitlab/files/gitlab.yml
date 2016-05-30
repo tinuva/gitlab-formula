@@ -55,6 +55,7 @@ production: &base
     # email_enabled: true
     # Email address used in the "From" field in mails sent by GitLab
     email_from: gitlab@{{ gl_domain }}
+    email_display_name: GitLab
 
     # Email server smtp settings are in config/initializers/smtp_settings.rb.sample
 
@@ -136,6 +137,15 @@ production: &base
   ldap:
     enabled: {{ salt['pillar.get']('gitlab:ldap:enabled', False) }}
     servers:
+      ##########################################################################
+      #
+      # Since GitLab 7.4, LDAP servers get ID's (below the ID is 'main'). GitLab
+      # Enterprise Edition now supports connecting to multiple LDAP servers.
+      #
+      # If you are updating from the old (pre-7.4) syntax, you MUST give your
+      # old server the ID 'main'.
+      #
+      ##########################################################################
       main:
         ## label
         #
@@ -202,16 +212,19 @@ production: &base
     # The 'app_id' and 'app_secret' parameters are always passed as the first two
     # arguments, followed by optional 'args' which can be either a hash or an array.
     providers:
-      # - { name: 'google_oauth2', app_id: 'YOUR APP ID',
-      #     app_secret: 'YOUR APP SECRET',
+      # - { name: 'google_oauth2', app_id: 'YOUR_APP_ID',
+      #     app_secret: 'YOUR_APP_SECRET',
       #     args: { access_type: 'offline', approval_prompt: '' } }
-      # - { name: 'twitter', app_id: 'YOUR APP ID',
-      #     app_secret: 'YOUR APP SECRET'}
-      # - { name: 'github', app_id: 'YOUR APP ID',
-      #     app_secret: 'YOUR APP SECRET',
+      # - { name: 'twitter', app_id: 'YOUR_APP_ID',
+      #     app_secret: 'YOUR_APP_SECRET'}
+      # - { name: 'github', app_id: 'YOUR_APP_ID',
+      #     app_secret: 'YOUR_APP_SECRET',
       #     args: { scope: 'user:email' } }
-
-
+      # - { name: 'gitlab', app_id: 'YOUR_APP_ID',
+      #     app_secret: 'YOUR_APP_SECRET',
+      #     args: { scope: 'api' } }
+      # - { name: 'bitbucket', app_id: 'YOUR_APP_ID',
+      #     app_secret: 'YOUR_APP_SECRET'}
 
   #
   # 3. Advanced settings
