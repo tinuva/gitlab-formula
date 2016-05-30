@@ -15,6 +15,7 @@ Debian:
       - libyaml-dev
       - libssl-dev
       - libgdbm-dev
+      - libkrb5-dev
       - libreadline-dev
       - libncurses5-dev
       - libffi-dev
@@ -72,6 +73,7 @@ RedHat:
       - glibc-devel
       - indent
       - intltool
+      - krb5-devel
       - libffi
       - libffi-devel
       - libicu
