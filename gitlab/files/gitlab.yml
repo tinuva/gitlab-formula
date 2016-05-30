@@ -9,6 +9,11 @@
 # GitLab application config file  #
 # # # # # # # # # # # # # # # # # #
 #
+###########################  NOTE  #####################################
+# This file should not receive new settings. All configuration options #
+# are being moved to ApplicationSetting model!                         #
+########################################################################
+#
 # How to use:
 # 1. copy file as gitlab.yml
 # 2. Replace gitlab -> host with your domain
@@ -56,6 +61,7 @@ production: &base
     # Email address used in the "From" field in mails sent by GitLab
     email_from: gitlab@{{ gl_domain }}
     email_display_name: GitLab
+    email_reply_to: noreply@{{ gl_domain }}
 
     # Email server smtp settings are in config/initializers/smtp_settings.rb.sample
 
@@ -81,8 +87,8 @@ production: &base
     ## Automatic issue closing
     # If a commit message matches this regular expression, all issues referenced from the matched text will be closed.
     # This happens when the commit is pushed or merged into the default branch of a project.
-    # When not specified the default issue_closing_pattern as specified below will be used.
-    # issue_closing_pattern: '((?:[Cc]los(?:e[sd]|ing)|[Ff]ix(?:e[sd]|ing)?) +(?:(?:issues? +)?#\d+(?:(?:, *| +and +)?))+)'
+    # Tip: you can test your closing pattern at http://rubular.com.
+    # issue_closing_pattern: '((?:[Cc]los(?:e[sd]?|ing)|[Ff]ix(?:e[sd]|ing)?) +(?:(?:issues? +)?#\d+(?:(?:, *| +and +)?))+)'
 
     ## Default project features settings
     default_projects_features:
@@ -91,35 +97,6 @@ production: &base
       wiki: false
       snippets: false
       visibility_level: "private"  # can be "private" | "internal" | "public"
-
-  ## External issues trackers
-  issues_tracker:
-    # redmine:
-    #   title: "Redmine"
-    #   ## If not nil, link 'Issues' on project page will be replaced with this
-    #   ## Use placeholders:
-    #   ##  :project_id        - GitLab project identifier
-    #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
-    #   project_url: "http://redmine.sample/projects/:issues_tracker_id"
-    #
-    #   ## If not nil, links from /#\d/ entities from commit messages will replaced with this
-    #   ## Use placeholders:
-    #   ##  :project_id        - GitLab project identifier
-    #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
-    #   ##  :id                - Issue id (from commit messages)
-    #   issues_url: "http://redmine.sample/issues/:id"
-    #
-    #   ## If not nil, linkis to creating new issues will be replaced with this
-    #   ## Use placeholders:
-    #   ##  :project_id        - GitLab project identifier
-    #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
-    #   new_issue_url: "http://redmine.sample/projects/:issues_tracker_id/issues/new"
-    #
-    # jira:
-    #   title: "Atlassian Jira"
-    #   project_url: "http://jira.sample/issues/?jql=project=:issues_tracker_id"
-    #   issues_url: "http://jira.sample/browse/:id"
-    #   new_issue_url: "http://jira.sample/secure/CreateIssue.jspa"
 
   ## Gravatar
   gravatar:
@@ -178,6 +155,11 @@ production: &base
         # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
         # disable this setting, because the userPrincipalName contains an '@'.
         allow_username_or_email_login: '{{ salt['pillar.get']('gitlab:ldap:allow_username_or_email_login', false) }}'
+
+        # To maintain tight control over the number of active users on your GitLab installation,
+        # enable this setting to keep new users blocked until they have been cleared by the admin
+        # (default: false).
+        block_auto_created_users: false
         
         # Base where we can search for users
         #
@@ -289,6 +271,9 @@ production: &base
 
   rack_attack:
     git_basic_auth:
+      # Rack Attack IP banning enabled
+      # enabled: true
+      #
       # Whitelist requests from 127.0.0.1 for web proxies (NGINX/Apache) with incorrect headers
       # ip_whitelist: ["127.0.0.1"]
       #
