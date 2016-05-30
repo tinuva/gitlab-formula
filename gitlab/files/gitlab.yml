@@ -18,6 +18,11 @@
 # 1. copy file as gitlab.yml
 # 2. Replace gitlab -> host with your domain
 # 3. Replace gitlab -> email_from
+# 4. If you installed Git from source, change git -> bin_path to /usr/local/bin/git
+#    IMPORTANT: If Git was installed in a different location use that instead.
+#    You can check with `which git`. If a wrong path of Git is specified, it will
+#     result in various issues such as failures of GitLab CI builds.
+# 5. Review this configuration file for other settings you may want to adjust
 
 production: &base
   #
@@ -96,7 +101,6 @@ production: &base
       merge_requests: true
       wiki: false
       snippets: false
-      visibility_level: "private"  # can be "private" | "internal" | "public"
 
   ## Gravatar
   gravatar:
