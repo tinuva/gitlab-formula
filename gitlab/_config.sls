@@ -14,7 +14,7 @@ gitlab:
   git:
     - latest
     - name: https://gitlab.com/gitlab-org/gitlab-ce.git
-    - rev: {{ salt['pillar.get']('gitlab:version', '7-12-stable') }}
+    - rev: {{ salt['pillar.get']('gitlab:version', '7-13-stable') }}
     - user: {{ gl_user }}
     - target: {{ gl_home }}/gitlab
     - force_checkout: True
