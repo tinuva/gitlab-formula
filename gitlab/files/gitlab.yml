@@ -108,8 +108,29 @@ production: &base
   # For documentation on how to set this up, see http://doc.gitlab.com/ce/incoming_email/README.html
   incoming_email:
     enabled: false
-    address: "incoming+%{key}@{{ gl_domain }}"
 
+    # The email address including the `%{key}` placeholder that will be replaced to reference the item being replied to.
+    # The `%{key}` placeholder is added after the user part, after a `+` character, before the `@`.
+    address: "gitlab-incoming+%{key}@{{ gl_domain }}"
+
+    # Email account username
+    # With third party providers, this is usually the full email address.
+    # With self-hosted email servers, this is usually the user part of the email address.
+    user: "gitlab-incoming@gmail.com"
+    # Email account password
+    password: "[REDACTED]"
+
+    # IMAP server host
+    host: "imap.gmail.com"
+    # IMAP server port
+    port: 993
+    # Whether the IMAP server uses SSL
+    ssl: true
+    # Whether the IMAP server uses StartTLS
+    start_tls: false
+
+    # The mailbox where incoming mail will end up. Usually "inbox".
+    mailbox: "inbox"
 
   ## Gravatar
   gravatar:
@@ -277,8 +298,11 @@ production: &base
   # ==========================
 
   # GitLab Satellites
+  #
+  # Note for maintainers: keep the satellites.path setting until GitLab 9.0 at
+  # least. This setting is fed to 'rm -rf' in
+  # db/migrate/20151023144219_remove_satellites.rb
   satellites:
-    # Relative paths are relative to Rails.root (default: tmp/repo_satellites/)
     path: {{ gl_home }}/gitlab-satellites/
 
   ## Backup settings
@@ -299,6 +323,8 @@ production: &base
     #   # Use multipart uploads when file size reaches 100MB, see
     #   #  http://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html
     #   multipart_chunk_size: 104857600
+    #   # Turns on AWS Server-Side Encryption with Amazon S3-Managed Keys for backups, this is optional
+    #   # encryption: 'AES256'
 
   ## GitLab Shell settings
   gitlab_shell:

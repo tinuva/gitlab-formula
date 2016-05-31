@@ -14,7 +14,7 @@ gitlab:
   git:
     - latest
     - name: https://gitlab.com/gitlab-org/gitlab-ce.git
-    - rev: {{ salt['pillar.get']('gitlab:version', '8-0-stable') }}
+    - rev: {{ salt['pillar.get']('gitlab:version', '8-1-stable') }}
     - user: {{ gl_user }}
     - target: {{ gl_home }}/gitlab
     - force_checkout: True
@@ -42,7 +42,7 @@ gitlab_workhorse:
   git:
     - latest
     - name: https://gitlab.com/gitlab-org/gitlab-workhorse.git
-    - rev: {{ salt['pillar.get']('gitlab:workhorse:version', '0.2.14') }}
+    - rev: {{ salt['pillar.get']('gitlab:workhorse:version', '0.3.0') }}
     - user: {{ gl_user }}
     - target: {{ gl_home }}/gitlab-workhorse
     - force_checkout: True
