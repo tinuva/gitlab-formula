@@ -102,6 +102,7 @@ production: &base
       merge_requests: true
       wiki: false
       snippets: false
+      builds: true
 
   ## Reply by email
   # Allow users to comment on issues and merge requests by replying to notification emails.
@@ -132,11 +133,27 @@ production: &base
     # The mailbox where incoming mail will end up. Usually "inbox".
     mailbox: "inbox"
 
+  ## Build Artifacts
+  artifacts:
+    enabled: true
+    # The location where build artifacts are stored (default: shared/artifacts).
+    # path: shared/artifacts
+
+  ## Git LFS
+  lfs:
+    enabled: true
+    # The location where LFS objects are stored (default: shared/lfs-objects).
+    # storage_path: shared/lfs-objects
+
   ## Gravatar
   gravatar:
     enabled: {{ salt['pillar.get']('gitlab:gravatar:enabled', True) }}                 # Use user avatar image from Gravatar.com (default: true)
     # plain_url: "http://..."     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
     # ssl_url:   "https://..."    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
+
+  # Shared file storage settings
+  shared:
+    # path: /mnt/gitlab # Default: shared
 
   #
   # 2. GitLab CI settings
