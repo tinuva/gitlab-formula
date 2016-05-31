@@ -103,6 +103,14 @@ production: &base
       wiki: false
       snippets: false
 
+  ## Reply by email
+  # Allow users to comment on issues and merge requests by replying to notification emails.
+  # For documentation on how to set this up, see http://doc.gitlab.com/ce/incoming_email/README.html
+  incoming_email:
+    enabled: false
+    address: "incoming+%{key}@{{ gl_domain }}"
+
+
   ## Gravatar
   gravatar:
     enabled: {{ salt['pillar.get']('gitlab:gravatar:enabled', True) }}                 # Use user avatar image from Gravatar.com (default: true)
@@ -110,7 +118,23 @@ production: &base
     # ssl_url:   "https://..."    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
 
   #
-  # 2. Auth settings
+  # 2. GitLab CI settings
+  # ==========================
+
+  gitlab_ci:
+    # Default project notifications settings:
+    #
+    # Send emails only on broken builds (default: true)
+    # all_broken_builds: true
+    #
+    # Add pusher to recipients list (default: false)
+    # add_pusher: true
+
+    # The location where build traces are stored (default: builds/). Relative paths are relative to Rails.root
+    # builds_path: builds/
+
+  #
+  # 3. Auth settings
   # ==========================
 
   ## LDAP settings
@@ -178,6 +202,26 @@ production: &base
         #   Ex. (employeeType=developer)
         #
         user_filter: '{{ salt['pillar.get']('gitlab:ldap:user_filter', '') }}'
+
+        # LDAP attributes that GitLab will use to create an account for the LDAP user.
+        # The specified attribute can either be the attribute name as a string (e.g. 'mail'),
+        # or an array of attribute names to try in order (e.g. ['mail', 'email']).
+        # Note that the user's LDAP login will always be the attribute specified as `uid` above.
+        attributes:
+          # The username will be used in paths for the user's own projects
+          # (like `gitlab.example.com/username/project`) and when mentioning
+          # them in issues, merge request and comments (like `@username`).
+          # If the attribute specified for `username` contains an email address,
+          # the GitLab username will be the part of the email address before the '@'.
+          username: ['uid', 'userid', 'sAMAccountName']
+          email:    ['mail', 'email', 'userPrincipalName']
+
+          # If no full name could be found at the attribute specified for `name`,
+          # the full name is determined using the attributes specified for
+          # `first_name` and `last_name`.
+          name:       'cn'
+          first_name: 'givenName'
+          last_name:  'sn'
     
 
   ## OmniAuth settings
@@ -229,7 +273,7 @@ production: &base
       #           } }
 
   #
-  # 3. Advanced settings
+  # 4. Advanced settings
   # ==========================
 
   # GitLab Satellites
@@ -242,6 +286,7 @@ production: &base
     path: "{{ salt['pillar.get']('gitlab:backup:path', 'tmp/backups') }}"   # Relative paths are relative to Rails.root (default: tmp/backups/)
     # archive_permissions: 0640 # Permissions for the resulting backup.tar file (default: 0600)
     keep_time: {{ salt['pillar.get']('gitlab:backup:keep_time', '604800') }}   # default: 0 (forever) (in seconds)
+    # pg_schema: public     # default: nil, it means that all schemas will be backed up
     # upload:
     #   # Fog storage connection settings, see http://fog.io/storage/ .
     #   connection:
@@ -286,7 +331,7 @@ production: &base
     timeout: 10
 
   #
-  # 4. Extra customization
+  # 5. Extra customization
   # ==========================
 
   extra:
