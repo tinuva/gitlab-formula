@@ -14,7 +14,7 @@ gitlab:
   git:
     - latest
     - name: https://gitlab.com/gitlab-org/gitlab-ce.git
-    - rev: {{ salt['pillar.get']('gitlab:version', '7-14-stable') }}
+    - rev: {{ salt['pillar.get']('gitlab:version', '8-0-stable') }}
     - user: {{ gl_user }}
     - target: {{ gl_home }}/gitlab
     - force_checkout: True
@@ -37,6 +37,24 @@ gitlab_gems:
     - user: {{ gl_user }}
     - cwd: {{ gl_home }}/gitlab
     - shell: /bin/bash
+
+gitlab_workhorse:
+  git:
+    - latest
+    - name: https://gitlab.com/gitlab-org/gitlab-workhorse.git
+    - rev: {{ salt['pillar.get']('gitlab:workhorse:version', '0.2.14') }}
+    - user: {{ gl_user }}
+    - target: {{ gl_home }}/gitlab-workhorse
+    - force_checkout: True
+    - watch_in:
+      - cmd: gitlab_workhorse_make
+
+gitlab_workhorse_make:
+  cmd:
+    - wait
+    - name: make
+    - user: {{ gl_user }}
+    - cwd: {{ gl_home }}/gitlab-workhorse
 
 home_dir:
   file:
@@ -121,7 +139,7 @@ db_config:
 shell_setup:
   cmd:
     - wait
-    - name: bundle exec rake gitlab:shell:install[{{ salt['pillar.get']('gitlab:shell:version', 'v2.6.5') }}] REDIS_URL=redis://localhost:6379 RAILS_ENV=production
+    - name: bundle exec rake gitlab:shell:install[{{ salt['pillar.get']('gitlab:shell:version', 'v2.6.5') }}] REDIS_URL=unix:/var/run/redis/redis.sock RAILS_ENV=production
     - user: {{ gl_user }}
     - cwd: {{ gl_home }}/gitlab
 
