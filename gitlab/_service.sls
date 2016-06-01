@@ -26,7 +26,7 @@ sidekiq_systemd:
     - watch:
       - git: gitlab
       - file: gitlab
-      - cmd: shell_setup
+      - git: shell_setup
 
 unicorn_systemd:
   file:
@@ -44,7 +44,7 @@ unicorn_systemd:
       - git: gitlab
       - file: gitlab
       - file: unicorn_config
-      - cmd: shell_setup
+      - git: shell_setup
 
 workhorse_systemd:
   file:
