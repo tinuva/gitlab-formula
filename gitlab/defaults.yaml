@@ -38,13 +38,14 @@ RedHat:
   ruby:
     rvm: {}
     sys:
-      pkgs:
-         - ruby
-         - ruby-devel
-         - rubygem-bundler
-#        - ruby193-ruby
-#        - ruby193-ruby-devel
-#        - ruby193-rubygem-bundler
+      pkgs: {}
+#      pkgs:
+#         - ruby
+#         - ruby-devel
+#         - rubygem-bundler
+##        - ruby193-ruby
+##        - ruby193-ruby-devel
+##        - ruby193-rubygem-bundler
   user: {}
   group: {}
   gitlab:

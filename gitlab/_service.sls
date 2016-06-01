@@ -26,7 +26,7 @@ sidekiq_systemd:
     - watch:
       - git: gitlab
       - file: gitlab
-      - cmd: shell_setup
+      - git: shell_setup
 
 unicorn_systemd:
   file:
@@ -44,7 +44,23 @@ unicorn_systemd:
       - git: gitlab
       - file: gitlab
       - file: unicorn_config
-      - cmd: shell_setup
+      - git: shell_setup
+
+workhorse_systemd:
+  file:
+    - managed
+    - name: /etc/systemd/system/gitlab-workhorse.service
+    - source: salt://gitlab/files/gitlab-workhorse.service
+    - user: root
+    - group: root
+    - mode: 644
+  service:
+    - running
+    - name: gitlab-workhorse
+    - enable: True
+    - watch:
+      - git: gitlab_workhorse
+      - cmd: gitlab_workhorse_make
 
 gitlab_systemd:
   file:

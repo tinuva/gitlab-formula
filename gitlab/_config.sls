@@ -14,13 +14,13 @@ gitlab:
   git:
     - latest
     - name: https://gitlab.com/gitlab-org/gitlab-ce.git
-    - rev: {{ salt['pillar.get']('gitlab:version', '8-1-stable') }}
+    - rev: {{ salt['pillar.get']('gitlab:version', '8-2-stable') }}
     - user: {{ gl_user }}
     - target: {{ gl_home }}/gitlab
     - force_checkout: True
     - watch_in:
       - cmd: gitlab_gems
-      - cmd: shell_setup
+      #- cmd: shell_setup
   file:
     - managed
     - name: {{ gl_home }}/gitlab/config/gitlab.yml
@@ -30,19 +30,37 @@ gitlab:
     - mode: 640
     - template: jinja
 
-gitlab_gems:
-  cmd:
-    - wait
-    - name: bundle install --verbose --deployment --without development test mysql aws
+shell_setup:
+  git:
+    - latest
+    - name: https://gitlab.com/gitlab-org/gitlab-shell.git
+    - rev: {{ salt['pillar.get']('gitlab:shell:version', 'v2.6.8') }}
     - user: {{ gl_user }}
-    - cwd: {{ gl_home }}/gitlab
-    - shell: /bin/bash
+    - target: {{ gl_home }}/gitlab-shell
+    - force_checkout: True
+
+#shell_setup:
+#  cmd:
+#    - wait
+#    - name: bundle exec rake gitlab:shell:install[{{ salt['pillar.get']('gitlab:shell:version', 'v2.6.8') }}] REDIS_URL=unix:/var/run/redis/redis.sock RAILS_ENV=production
+#    - user: {{ gl_user }}
+#    - cwd: {{ gl_home }}/gitlab
+
+shell_config:
+  file:
+    - managed
+    - name: {{ gl_home }}/gitlab-shell/config.yml
+    - source: salt://gitlab/files/shell-config.yml
+    - user: {{ gl_user }}
+    - group: {{ gl_group }}
+    - mode: 644
+    - template: jinja
 
 gitlab_workhorse:
   git:
     - latest
     - name: https://gitlab.com/gitlab-org/gitlab-workhorse.git
-    - rev: {{ salt['pillar.get']('gitlab:workhorse:version', '0.3.0') }}
+    - rev: {{ salt['pillar.get']('gitlab:workhorse:version', '0.4.2') }}
     - user: {{ gl_user }}
     - target: {{ gl_home }}/gitlab-workhorse
     - force_checkout: True
@@ -55,6 +73,14 @@ gitlab_workhorse_make:
     - name: make
     - user: {{ gl_user }}
     - cwd: {{ gl_home }}/gitlab-workhorse
+
+gitlab_gems:
+  cmd:
+    - wait
+    - name: bundle install --verbose --deployment --without development test mysql aws
+    - user: {{ gl_user }}
+    - cwd: {{ gl_home }}/gitlab
+    - shell: /bin/bash
 
 home_dir:
   file:
@@ -134,23 +160,6 @@ db_config:
     - user: {{ gl_user }}
     - group: {{ gl_group }}
     - mode: 640
-    - template: jinja
-
-shell_setup:
-  cmd:
-    - wait
-    - name: bundle exec rake gitlab:shell:install[{{ salt['pillar.get']('gitlab:shell:version', 'v2.6.5') }}] REDIS_URL=unix:/var/run/redis/redis.sock RAILS_ENV=production
-    - user: {{ gl_user }}
-    - cwd: {{ gl_home }}/gitlab
-
-shell_config:
-  file:
-    - managed
-    - name: {{ gl_home }}/gitlab-shell/config.yml
-    - source: salt://gitlab/files/shell-config.yml
-    - user: {{ gl_user }}
-    - group: {{ gl_group }}
-    - mode: 644
     - template: jinja
 
 initialize_db:
