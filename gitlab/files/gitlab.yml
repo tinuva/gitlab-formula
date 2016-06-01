@@ -94,7 +94,7 @@ production: &base
     # If a commit message matches this regular expression, all issues referenced from the matched text will be closed.
     # This happens when the commit is pushed or merged into the default branch of a project.
     # Tip: you can test your closing pattern at http://rubular.com.
-    # issue_closing_pattern: '((?:[Cc]los(?:e[sd]?|ing)|[Ff]ix(?:e[sd]|ing)?) +(?:(?:issues? +)?#\d+(?:(?:, *| +and +)?))+)'
+    # issue_closing_pattern: '((?:[Cc]los(?:e[sd]?|ing)|[Ff]ix(?:e[sd]|ing)?) +(?:(?:issues? +)?%{issue_ref}(?:(?:, *| +and +)?))+)'
 
     ## Default project features settings
     default_projects_features:
@@ -103,6 +103,14 @@ production: &base
       wiki: false
       snippets: false
       builds: true
+
+  ## Auxiliary jobs
+  # Periodically executed jobs, to self-heal Gitlab, do external synchronizations, etc.
+  # Please read here for more information: https://github.com/ondrejbartas/sidekiq-cron#adding-cron-job
+  cron_jobs:
+    # Flag stuck CI builds as failed
+    stuck_ci_builds_worker:
+      cron: "0 0 * * *"
 
   ## Reply by email
   # Allow users to comment on issues and merge requests by replying to notification emails.
@@ -206,6 +214,11 @@ production: &base
         method: '{{ salt['pillar.get']('gitlab:ldap:method', 'ssl') }}' # "ssl" or "plain" or "tls"
         bind_dn: '{{ salt['pillar.get']('gitlab:ldap:bind_dn', '') }}'
         password: '{{ salt['pillar.get']('gitlab:ldap:password', '') }}'
+
+        # Set a timeout, in seconds, for LDAP queries. This helps avoid blocking
+        # a request if the LDAP server becomes unresponsive.
+        # A value of 0 means there is no timeout.
+        timeout: 10
 
         # This setting specifies if LDAP server is Active Directory LDAP server.
         # For non AD servers it skips the AD specific queries.
