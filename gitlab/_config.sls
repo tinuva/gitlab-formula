@@ -10,11 +10,14 @@ include:
 {% set gl_user = datamap.user.name|default('git') %}
 {% set gl_group = datamap.group.name|default('git') %}
 
+# View url: https://gitlab.com/gitlab-org/gitlab-ce/tree/master/doc/update
+# Review what is required to go to next version before bumping versions for gitlab, shell and workhorse
+
 gitlab:
   git:
     - latest
     - name: https://gitlab.com/gitlab-org/gitlab-ce.git
-    - rev: {{ salt['pillar.get']('gitlab:version', '8-8-stable') }}
+    - rev: {{ salt['pillar.get']('gitlab:version', '8-9-stable') }}
     - user: {{ gl_user }}
     - target: {{ gl_home }}/gitlab
     - force_checkout: True
@@ -34,17 +37,10 @@ shell_setup:
   git:
     - latest
     - name: https://gitlab.com/gitlab-org/gitlab-shell.git
-    - rev: {{ salt['pillar.get']('gitlab:shell:version', 'v2.7.2') }}
+    - rev: {{ salt['pillar.get']('gitlab:shell:version', 'v3.0.0') }}
     - user: {{ gl_user }}
     - target: {{ gl_home }}/gitlab-shell
     - force_checkout: True
-
-#shell_setup:
-#  cmd:
-#    - wait
-#    - name: bundle exec rake gitlab:shell:install[{{ salt['pillar.get']('gitlab:shell:version', 'v2.6.8') }}] REDIS_URL=unix:/var/run/redis/redis.sock RAILS_ENV=production
-#    - user: {{ gl_user }}
-#    - cwd: {{ gl_home }}/gitlab
 
 shell_config:
   file:
@@ -60,7 +56,7 @@ gitlab_workhorse:
   git:
     - latest
     - name: https://gitlab.com/gitlab-org/gitlab-workhorse.git
-    - rev: {{ salt['pillar.get']('gitlab:workhorse:version', '0.7.2') }}
+    - rev: {{ salt['pillar.get']('gitlab:workhorse:version', '0.7.5') }}
     - user: {{ gl_user }}
     - target: {{ gl_home }}/gitlab-workhorse
     - force_checkout: True
