@@ -56,7 +56,7 @@ gitlab_workhorse:
   git:
     - latest
     - name: https://gitlab.com/gitlab-org/gitlab-workhorse.git
-    - rev: {{ salt['pillar.get']('gitlab:workhorse:version', '0.7.5') }}
+    - rev: {{ salt['pillar.get']('gitlab:workhorse:version', 'v0.7.5') }}
     - user: {{ gl_user }}
     - target: {{ gl_home }}/gitlab-workhorse
     - force_checkout: True
